@@ -1,6 +1,8 @@
 import { Request, Response } from "express";
 import { getRepository } from "typeorm";
+import { Classes } from "../entity/Classes";
 import { Instructors } from "../entity/Instructors";
+import { InstructorClasses } from "../entity/InstructorClasses";
 
 export class InstructorController {
   /**
@@ -22,6 +24,38 @@ export class InstructorController {
     await repository.save(newInstructor);
 
     return res.json(newInstructor);
+  }
+
+  async assignToClass(req: Request, res: Response) {
+    const { instructorCPF, classId } = req.body;
+    const instructorsRepository = getRepository(Instructors);
+    const classesRepository = getRepository(Classes);
+    const enrollmentRepository = getRepository(InstructorClasses);
+
+    const instructorExists = await instructorsRepository.findOne({
+      cpf: instructorCPF,
+    });
+    if (!instructorExists) {
+      return res.status(400).json({ error: "Instructor does not exist" });
+    }
+    const classWithInstructor = await enrollmentRepository.findOne({
+      class: classId,
+    });
+    if (classWithInstructor) {
+      return res.status(400).json({ error: "Class has instructor already. " });
+    }
+    const classExists = await classesRepository.findOne({ id: classId });
+    if (!classExists) {
+      return res.status(400).json({ error: "Class does not exist" });
+    }
+
+    const enroll = enrollmentRepository.create({
+      instructor: instructorExists.id,
+      class: classExists.id,
+    });
+    await enrollmentRepository.save(enroll);
+
+    return res.json(enroll);
   }
 
   async showAll(req: Request, res: Response) {}

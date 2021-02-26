@@ -12,5 +12,6 @@ router.post("/students", students.create);
 router.post("/instructors", instructors.create);
 router.post("/classes", classes.create);
 router.post("/students/enrollment", students.assignToClass);
+router.post("/instructors/assign", instructors.assignToClass);
 
 export { router };

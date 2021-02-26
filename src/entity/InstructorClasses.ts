@@ -9,9 +9,9 @@ import {
  * This entity controls which classes each student is taking.
  */
 @Entity()
-export class StudentClasses {
+export class InstructorClasses {
   @PrimaryGeneratedColumn("uuid")
-  student: number;
+  instructor: number;
 
   @PrimaryGeneratedColumn("uuid")
   class: number;

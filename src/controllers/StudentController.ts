@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import { getRepository } from "typeorm";
 import { Students } from "../entity/Students";
 import { Classes } from "../entity/Classes";
-import { StudentClasses } from "../entity/StudentClasses";
+import { StudentClass } from "../entity/StudentClass";
 
 export class StudentController {
   /**
@@ -36,7 +36,7 @@ export class StudentController {
     const { studentCPF, classId } = req.body;
     const studentsRepository = getRepository(Students);
     const classesRepository = getRepository(Classes);
-    const enrollmentRepository = getRepository(StudentClasses);
+    const enrollmentRepository = getRepository(StudentClass);
 
     const studentExists = await studentsRepository.findOne({ cpf: studentCPF });
     if (!studentExists) {
@@ -45,6 +45,13 @@ export class StudentController {
     const classExists = await classesRepository.findOne({ id: classId });
     if (!classExists) {
       return res.status(400).json({ error: "Class does not exist" });
+    }
+    const studentEnrolled = await enrollmentRepository.findOne({
+      student: studentExists.id,
+      class: classId,
+    });
+    if (studentEnrolled) {
+      return res.status(400).json({ error: "Student already enrolled." });
     }
 
     const enroll = enrollmentRepository.create({
@@ -55,4 +62,5 @@ export class StudentController {
 
     return res.json(enroll);
   }
+
 }
