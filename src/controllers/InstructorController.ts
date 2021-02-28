@@ -1,8 +1,8 @@
 import { Request, Response } from "express";
-import { getRepository } from "typeorm";
-import { Classes } from "../entities/Classes";
-import { Instructors } from "../entities/Instructors";
-import { InstructorClasses } from "../entities/InstructorClasses";
+import { getCustomRepository } from "typeorm";
+import { ClassesRepository } from "../repositories/ClassesRepository";
+import { InstructorClassesRepository } from "../repositories/InstructorClassesRepository";
+import { InstructorsRepository } from "../repositories/InstructorsRepository";
 
 export class InstructorController {
   /**
@@ -13,7 +13,7 @@ export class InstructorController {
    */
   async create(req: Request, res: Response) {
     const { name, email, cpf } = req.body;
-    const repository = getRepository(Instructors);
+    const repository = getCustomRepository(InstructorsRepository);
 
     const exists = await repository.findOne({ cpf });
     if (exists) {
@@ -28,9 +28,11 @@ export class InstructorController {
 
   async assignToClass(req: Request, res: Response) {
     const { instructorCPF, classId } = req.body;
-    const instructorsRepository = getRepository(Instructors);
-    const classesRepository = getRepository(Classes);
-    const enrollmentRepository = getRepository(InstructorClasses);
+    const instructorsRepository = getCustomRepository(InstructorsRepository);
+    const classesRepository = getCustomRepository(ClassesRepository);
+    const enrollmentRepository = getCustomRepository(
+      InstructorClassesRepository
+    );
 
     const instructorExists = await instructorsRepository.findOne({
       cpf: instructorCPF,

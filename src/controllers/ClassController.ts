@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
-import { getRepository } from "typeorm";
-import { Classes } from "../entities/Classes";
+import { getCustomRepository } from "typeorm";
+import { ClassesRepository } from "../repositories/ClassesRepository";
 
 export class ClassController {
   /**
@@ -11,7 +11,7 @@ export class ClassController {
    */
   async create(req: Request, res: Response) {
     const { name, period, year, duration } = req.body;
-    const repository = getRepository(Classes);
+    const repository = getCustomRepository(ClassesRepository);
 
     const exists = await repository.findOne({ name, year, period });
     if (exists) {
@@ -25,7 +25,7 @@ export class ClassController {
   }
 
   async showAll(req: Request, res: Response) {
-    const repository = getRepository(Classes);
+    const repository = getCustomRepository(ClassesRepository);
 
     const allClasses = await repository.find();
     return res.json(allClasses);

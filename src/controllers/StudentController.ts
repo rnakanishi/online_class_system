@@ -1,9 +1,8 @@
 import { Request, Response } from "express";
-import { getCustomRepository, getRepository } from "typeorm";
-import { Students } from "../entities/Students";
-import { Classes } from "../entities/Classes";
-import { StudentClass } from "../entities/StudentClass";
-import { ClassQuestions } from "../entities/ClassQuestions";
+import { getCustomRepository } from "typeorm";
+import { ClassesRepository } from "../repositories/ClassesRepository";
+import { ClassQuestionsRepository } from "../repositories/QuestionsRepository";
+import { StudentClassRepository } from "../repositories/StudentsClassRepository";
 import { StudentsRepository } from "../repositories/StudentsRepository";
 
 export class StudentController {
@@ -15,7 +14,7 @@ export class StudentController {
    */
   async create(req: Request, res: Response) {
     const { name, email, cpf } = req.body;
-    const repository = getRepository(Students);
+    const repository = getCustomRepository(StudentsRepository);
 
     const cpfExists = await repository.findOne({ cpf });
     if (cpfExists) {
@@ -31,14 +30,14 @@ export class StudentController {
     const newStudent = repository.create({ name, email, cpf });
     await repository.save(newStudent);
 
-    return res.json(newStudent);
+    return res.status(201).json(newStudent);
   }
 
   async assignToClass(req: Request, res: Response) {
     const { studentCPF, classId } = req.body;
     const studentsRepository = getCustomRepository(StudentsRepository);
-    const classesRepository = getRepository(Classes);
-    const enrollmentRepository = getRepository(StudentClass);
+    const classesRepository = getCustomRepository(ClassesRepository);
+    const enrollmentRepository = getCustomRepository(StudentClassRepository);
 
     const studentExists = await studentsRepository.findOne({ cpf: studentCPF });
     if (!studentExists) {
@@ -67,8 +66,8 @@ export class StudentController {
 
   async registerQuestion(req: Request, res: Response) {
     const { studentID, classId, question } = req.body;
-    const enrollmentRepository = getRepository(StudentClass);
-    const questionsRepository = getRepository(ClassQuestions);
+    const enrollmentRepository = getCustomRepository(StudentClassRepository);
+    const questionsRepository = getCustomRepository(ClassQuestionsRepository);
 
     const studentEnrolled = await enrollmentRepository.find({
       student: studentID,

@@ -6,6 +6,7 @@
   "author": "RNakanishi <rafael.umino.nakanishi@gmail.com>",
   "license": "MIT",
   "scripts": {
+    "start": "node server.js",
     "dev": "ts-node-dev --ignore-watch node_modules src/server.ts",
     "typeorm": "ts-node-dev ./node_modules/typeorm/cli.js",
     "test": "NODE_ENV=test jest"
