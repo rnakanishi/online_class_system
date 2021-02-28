@@ -1,11 +1,20 @@
 {
    "name": "default",
    "type": "postgres",
-   "host": "localhost",
+   "host": "ec2-34-198-31-223.compute-1.amazonaws.com",
    "port": 5432,
-   "database": "online_classes",
-   "username": "cefis",
-   "password": "cefis123",
+   "database": "dfguu7lj0g7btb",
+   "username": "slzflpodaafdps",
+   "password": "0d9ec16ebfc5789fcb63b4646b7c8a526e14bcc33fba0994ff011d8fe097bcef",
+
+   // For Heroku connection
+   "ssl": true,
+   "extra": {
+      "ssl": {
+         "rejectUnauthorized": false
+      }
+   },
+
    "synchronize": true,
    "logging": true,
    "entities": [

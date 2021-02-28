@@ -1,9 +1,7 @@
-import express from "express";
-import "./database";
-import { router } from "./routes";
+import { app } from "./app";
+import { createServer } from "https";
 
-const app = express();
-app.use(express.json());
-app.use(router);
+// app.listen(4000, () => console.log("Listening to port 4000"));
 
-app.listen(4000, () => console.log("Listening to port 4000"));
+const server = createServer(app);
+server.listen(4000);
