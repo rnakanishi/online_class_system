@@ -11,7 +11,9 @@ const classes = new ClassController();
 router.post("/students", students.create);
 router.post("/instructors", instructors.create);
 router.post("/classes", classes.create);
+router.get("/classes", classes.showAll);
 router.post("/students/enrollment", students.assignToClass);
 router.post("/instructors/assign", instructors.assignToClass);
+router.post("/students/question", students.registerQuestion);
 
 export { router };

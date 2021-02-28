@@ -4,17 +4,18 @@ import {
   Column,
   CreateDateColumn,
 } from "typeorm";
+import { v4 as uuid } from "uuid";
 
 /**
  * This entity controls which classes each student is taking.
  */
-@Entity()
-export class InstructorClasses {
+@Entity("student_classes")
+export class StudentClass {
   @PrimaryGeneratedColumn("uuid")
-  instructor: number;
+  student: string;
 
   @PrimaryGeneratedColumn("uuid")
-  class: number;
+  class: string;
 
   @CreateDateColumn()
   created_at: Date;

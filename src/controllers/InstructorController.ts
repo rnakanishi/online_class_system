@@ -1,8 +1,8 @@
 import { Request, Response } from "express";
 import { getRepository } from "typeorm";
-import { Classes } from "../entity/Classes";
-import { Instructors } from "../entity/Instructors";
-import { InstructorClasses } from "../entity/InstructorClasses";
+import { Classes } from "../entities/Classes";
+import { Instructors } from "../entities/Instructors";
+import { InstructorClasses } from "../entities/InstructorClasses";
 
 export class InstructorController {
   /**
@@ -23,7 +23,7 @@ export class InstructorController {
     const newInstructor = repository.create({ name, email, cpf });
     await repository.save(newInstructor);
 
-    return res.json(newInstructor);
+    return res.status(201).json(newInstructor);
   }
 
   async assignToClass(req: Request, res: Response) {

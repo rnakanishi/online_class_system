@@ -1,8 +1,10 @@
 import { Request, Response } from "express";
-import { getRepository } from "typeorm";
-import { Students } from "../entity/Students";
-import { Classes } from "../entity/Classes";
-import { StudentClass } from "../entity/StudentClass";
+import { getCustomRepository, getRepository } from "typeorm";
+import { Students } from "../entities/Students";
+import { Classes } from "../entities/Classes";
+import { StudentClass } from "../entities/StudentClass";
+import { ClassQuestions } from "../entities/ClassQuestions";
+import { StudentsRepository } from "../repositories/StudentsRepository";
 
 export class StudentController {
   /**
@@ -34,7 +36,7 @@ export class StudentController {
 
   async assignToClass(req: Request, res: Response) {
     const { studentCPF, classId } = req.body;
-    const studentsRepository = getRepository(Students);
+    const studentsRepository = getCustomRepository(StudentsRepository);
     const classesRepository = getRepository(Classes);
     const enrollmentRepository = getRepository(StudentClass);
 
@@ -60,7 +62,35 @@ export class StudentController {
     });
     await enrollmentRepository.save(enroll);
 
-    return res.json(enroll);
+    return res.status(201).json(enroll);
   }
 
+  async registerQuestion(req: Request, res: Response) {
+    const { studentID, classId, question } = req.body;
+    const enrollmentRepository = getRepository(StudentClass);
+    const questionsRepository = getRepository(ClassQuestions);
+
+    const studentEnrolled = await enrollmentRepository.find({
+      student: studentID,
+      class: classId,
+    });
+    if (!studentEnrolled) {
+      return res.status(400).json({ error: "Student not enrolled." });
+    }
+    const studentAsked = await questionsRepository.find({
+      student: studentID,
+      class: classId,
+    });
+    if (studentAsked.length >= 2) {
+      return res.status(400).json({ error: "Student already asked twice." });
+    }
+
+    const ask = questionsRepository.create({
+      student: studentID,
+      class: classId,
+      question,
+    });
+    questionsRepository.save(ask);
+    return res.json(ask);
+  }
 }

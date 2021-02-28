@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { getRepository } from "typeorm";
-import { Classes } from "../entity/Classes";
+import { Classes } from "../entities/Classes";
 
 export class ClassController {
   /**
@@ -15,14 +15,19 @@ export class ClassController {
 
     const exists = await repository.findOne({ name, year, period });
     if (exists) {
-      return res.status(400).json({ error: "Instructor already exists " });
+      return res.status(400).json({ error: "Class already registered" });
     }
 
     const newClass = repository.create({ name, year, period, duration });
     await repository.save(newClass);
 
-    return res.json(newClass);
+    return res.status(201).json(newClass);
   }
 
-  async showAll(req: Request, res: Response) {}
+  async showAll(req: Request, res: Response) {
+    const repository = getRepository(Classes);
+
+    const allClasses = await repository.find();
+    return res.json(allClasses);
+  }
 }

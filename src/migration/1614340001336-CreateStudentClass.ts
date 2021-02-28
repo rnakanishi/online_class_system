@@ -9,7 +9,7 @@ export class CreateStudentClass1614340001336 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.createTable(
       new Table({
-        name: "StudentClass",
+        name: "student_classes",
         columns: [
           {
             name: "student",
@@ -25,26 +25,24 @@ export class CreateStudentClass1614340001336 implements MigrationInterface {
             default: "now()",
           },
         ],
-      })
-    );
-
-    await queryRunner.createForeignKey(
-      "StudentClass",
-      new TableForeignKey({
-        columnNames: ["student"],
-        referencedColumnNames: ["id"],
-        referencedTableName: "Students",
-        onDelete: "CASCADE",
-      })
-    );
-
-    await queryRunner.createForeignKey(
-      "StudentClass",
-      new TableForeignKey({
-        columnNames: ["class"],
-        referencedColumnNames: ["id"],
-        referencedTableName: "Classes",
-        onDelete: "CASCADE",
+        foreignKeys: [
+          {
+            name: "FK_student",
+            columnNames: ["student"],
+            referencedColumnNames: ["id"],
+            referencedTableName: "students",
+            onDelete: "CASCADE",
+            onUpdate: "CASCADE",
+          },
+          {
+            name: "FK_class",
+            columnNames: ["class"],
+            referencedColumnNames: ["id"],
+            referencedTableName: "classes",
+            onDelete: "CASCADE",
+            onUpdate: "CASCADE",
+          },
+        ],
       })
     );
   }

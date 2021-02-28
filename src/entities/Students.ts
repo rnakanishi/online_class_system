@@ -1,9 +1,10 @@
 import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
+import { v4 as uuid } from "uuid";
 
-@Entity()
-export class Instructors {
+@Entity("students")
+export class Students {
   @PrimaryGeneratedColumn("uuid")
-  id: number;
+  id: string;
 
   @Column()
   name: string;
@@ -13,4 +14,10 @@ export class Instructors {
 
   @Column()
   cpf: string;
+
+  constructor() {
+    if (!this.id) {
+      this.id = uuid();
+    }
+  }
 }

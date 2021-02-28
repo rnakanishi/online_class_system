@@ -8,13 +8,13 @@ import {
 /**
  * This entity controls which classes each student is taking.
  */
-@Entity()
-export class StudentClass {
+@Entity("instructor_classes")
+export class InstructorClasses {
   @PrimaryGeneratedColumn("uuid")
-  student: number;
+  instructor: string;
 
   @PrimaryGeneratedColumn("uuid")
-  class: number;
+  class: string;
 
   @CreateDateColumn()
   created_at: Date;

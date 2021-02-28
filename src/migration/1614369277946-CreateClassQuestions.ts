@@ -5,28 +5,41 @@ import {
   TableForeignKey,
 } from "typeorm";
 
-export class CreateInstructorClass1614364222931 implements MigrationInterface {
+export class CreateClassQuestions1614369277946 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.createTable(
       new Table({
-        name: "instructor_classes",
+        name: "class_questions",
         columns: [
           {
-            name: "instructor",
+            name: "id",
+            type: "uuid",
+            isPrimary: true,
+          },
+          {
+            name: "student",
             type: "uuid",
           },
           {
             name: "class",
             type: "uuid",
-            isPrimary: true,
+          },
+          {
+            name: "question",
+            type: "text",
+          },
+          {
+            name: "created_at",
+            type: "Date",
+            default: "now()",
           },
         ],
         foreignKeys: [
           {
-            name: "FK_instructor",
-            columnNames: ["instructor"],
+            name: "FK_student",
+            columnNames: ["student"],
             referencedColumnNames: ["id"],
-            referencedTableName: "instructors",
+            referencedTableName: "students",
             onDelete: "CASCADE",
           },
           {
