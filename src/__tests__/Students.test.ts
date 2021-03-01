@@ -10,7 +10,7 @@ describe("Students", () => {
   });
 
   it("Should be able to create a student", async () => {
-    const response = await request(app).post("Students").send({
+    const response = await request(app).post("students").send({
       name: "Nome Teste",
       email: "teste@email.com",
       cpf: "12312312312",
@@ -21,7 +21,7 @@ describe("Students", () => {
   });
 
   it("Should not be able to create a student with same cpf", async () => {
-    const response = await request(app).post("Students").send({
+    const response = await request(app).post("students").send({
       name: "Nome Teste",
       email: "newtest@newmail.com",
       cpf: "12312312312",
@@ -31,7 +31,7 @@ describe("Students", () => {
   });
 
   it("Should not be able to create a student with same email", async () => {
-    const response = await request(app).post("Students").send({
+    const response = await request(app).post("students").send({
       name: "Nome Teste",
       email: "teste@email.com",
       cpf: "98798798798",
