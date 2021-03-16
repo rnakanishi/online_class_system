@@ -1,12 +1,14 @@
 import request from "supertest";
-import { Connection } from "typeorm";
 import { app } from "../app";
 import createConnection from "../database";
 
-createConnection();
-describe("Students", () => {
+describe("Classes", () => {
+  beforeAll(async () => {
+    await createConnection();
+  });
+
   it("Should be able to create a class", async () => {
-    const response = await request(app).post("classes").send({
+    const response = await request(app).post("/classes").send({
       name: "Class test",
       period: "02",
       year: "2021",
@@ -14,6 +16,27 @@ describe("Students", () => {
     });
 
     expect(response.status).toBe(201);
-    expect(response).toHaveProperty("id");
   });
+
+  it("Should not be able to create a class with same parameters", async () => {
+    const response = await request(app).post("/classes").send({
+      name: "Class test",
+      period: "02",
+      year: "2021",
+      duration: "36",
+    });
+
+    expect(response.status).toBe(201);
+  });
+
+  it("Should be able to create a class with same name on different periods", async () => {
+    const response = await request(app).post("/classes").send({
+      name: "Class test",
+      period: "03",
+      year: "2020",
+      duration: "36",
+    });
+
+    expect(response.status).toBe(201);
+  );
 });

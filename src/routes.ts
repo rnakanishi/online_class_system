@@ -16,5 +16,6 @@ router.get("/classes", classes.showAll);
 router.post("/students/enrollment", students.assignToClass);
 router.post("/instructors/assign", instructors.assignToClass);
 router.post("/students/question", students.registerQuestion);
+router.post("/instructors/question", students.registerQuestion);
 
 export { router };

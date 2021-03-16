@@ -3,6 +3,7 @@ import { getCustomRepository } from "typeorm";
 import { ClassesRepository } from "../repositories/ClassesRepository";
 import { InstructorClassesRepository } from "../repositories/InstructorClassesRepository";
 import { InstructorsRepository } from "../repositories/InstructorsRepository";
+import { ClassQuestionsRepository } from "../repositories/QuestionsRepository";
 
 export class InstructorController {
   /**
@@ -58,6 +59,37 @@ export class InstructorController {
     await enrollmentRepository.save(enroll);
 
     return res.json(enroll);
+  }
+
+  async getOpenQuestion(req: Request, res: Response) {}
+
+  async answerQuestion(req: Request, res: Response) {
+    const { instructorId, classId, question } = req.body;
+    const enrollmentRepository = getCustomRepository(InstructorClassesRepository);
+    const questionsRepository = getCustomRepository(ClassQuestionsRepository);
+
+    const studentEnrolled = await enrollmentRepository.find({
+      instructor: instructorId,
+      class: classId,
+    });
+    if (!studentEnrolled) {
+      return res.status(400).json({ error: "Student not enrolled." });
+    }
+    const studentAsked = await questionsRepository.find({
+      instructor: instructorId,
+      class: classId,
+    });
+    if (studentAsked.length >= 2) {
+      return res.status(400).json({ error: "Student already asked twice." });
+    }
+
+    const ask = questionsRepository.create({
+      instructor: instructorId,
+      class: classId,
+      question,
+    });
+    questionsRepository.save(ask);
+    return res.json(ask);
   }
 
   async showAll(req: Request, res: Response) {}

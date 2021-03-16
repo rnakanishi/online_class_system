@@ -21,7 +21,7 @@ export class StudentController {
       return res.status(400).json({ error: "User CPF already registered " });
     }
     const emailExists = await repository.findOne({ email });
-    if (cpfExists) {
+    if (emailExists) {
       return res
         .status(400)
         .json({ error: "Email already registered to a different CPF" });

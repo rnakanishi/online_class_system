@@ -2,14 +2,10 @@
    "name": "default",
    "type": "postgres",
    "host": "ec2-34-198-31-223.compute-1.amazonaws.com",
-   "host_dev": "localhost",
    "port": 5432,
    "database": "dfguu7lj0g7btb",
-   "database_dev": "online_classes",
    "username": "slzflpodaafdps",
-   "username_dev": "cefis",
    "password": "0d9ec16ebfc5789fcb63b4646b7c8a526e14bcc33fba0994ff011d8fe097bcef",
-   "password_dev": "cefis123",
 
    "ssl": true,
    "extra": {
